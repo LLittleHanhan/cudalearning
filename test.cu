@@ -14,10 +14,7 @@ __global__ void sumArrayOnGpu(int* ga, int* gb, int* gres) {
     gres[i] = ga[i] + gb[i];
 }
 
-int main() {
-    int dev = 0;
-    // cout << cudaGetDeviceCount();
-    cudaSetDevice(dev);
+void test() {
     int n = 32;
     int nbyte = sizeof(int) * n;
 
@@ -42,10 +39,23 @@ int main() {
     cudaMemcpy(res, gres, nbyte, cudaMemcpyDeviceToHost);
 
     for (int i = 0; i < n; i++) {
-        cout << res[i];
+        cout << res[i] << " ";
     }
 
     cudaFree(ga);
     cudaFree(gb);
     cudaFree(gres);
+}
+
+int main() {
+    int dev = 0;
+    cudaSetDevice(dev);
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, dev);
+    cout << prop.name << endl;
+    cout << "warpsize:" << prop.warpSize << endl;
+    cout << "max num threads of per block:" << prop.maxThreadsPerBlock;
+    cout << "max num threads of per mutipro:" << prop.maxThreadsPerMultiProcessor;
+    cout << "max num warps of per mutipro:" << prop.maxThreadsPerMultiProcessor / 32;
 }
