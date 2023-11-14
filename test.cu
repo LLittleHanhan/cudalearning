@@ -11,7 +11,7 @@ void initval(int s[], int n) {
 }
 
 __global__ void sumArrayOnGpu(int* ga, int* gb, int* gres, int tx, int ty, int bx, int by) {
-    int i = (blockIdx.y * by + bx) * tx * ty + threadIdx.y * ty + tx;
+    int i = (blockIdx.y * by + blockIdx.x) * tx * ty + threadIdx.y * ty + threadIdx.x;
     gres[i] = ga[i] + gb[i];
 }
 
@@ -61,7 +61,8 @@ int main(int argc, char** argv) {
     cout << "max num threads of per mutipro:" << prop.maxThreadsPerMultiProcessor << endl;
     cout << "max num warps of per mutipro:" << prop.maxThreadsPerMultiProcessor / 32 << endl;
 
-    int tx = atoi(argv[0]);
-    int ty = atoi(argv[1]);
+    int tx = atoi(argv[1]);
+    int ty = atoi(argv[2]);
+    cout << tx << " " << ty;
     test(tx, ty);
 }
