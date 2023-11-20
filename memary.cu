@@ -11,7 +11,7 @@ __device__ int gb;
 __global__ void var() {
     int a = 0;          // 寄存器
     int s[1000] = {0};  // 本地内存
-    printf("%d %d %d %d %d", threadIdx.x, a, s[0], ga, gb);
+    printf("%p %p", &a, &s);
 }
 
 int main(int argc, char** argv) {
